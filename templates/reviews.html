@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Reviews</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                {% if session.role == 'freelancer' %}
+                <th>Client</th>
+                {% else %}
+                <th>Freelancer</th>
+                {% endif %}
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+            <tr>
+                <td>{{ review.review_id }}</td>
+                {% if session.role == 'freelancer' %}
+                <td>{{ review.client_name }}</td>
+                {% else %}
+                <td>{{ review.freelancer_name }}</td>
+                {% endif %}
+                <td><span class="rating">{{ review.rating }} ⭐</span></td>
+                <td>{{ review.comments }}</td>
+                <td>{{ review.review_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

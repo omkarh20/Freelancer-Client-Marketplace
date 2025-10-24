@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>Welcome, {{ client.client_name }}</h2>
+    <p>Email: {{ client.client_email }}</p>
+    <p>Member since: {{ client.client_registration_date }}</p>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <h3>{{ active_count }}</h3>
+        <p>Active Projects</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ projects|length }}</h3>
+        <p>Total Projects</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>My Projects</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>Status</th>
+                <th>Budget</th>
+                <th>Proposals</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.project_title }}</td>
+                <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
+                <td>${{ "%.2f"|format(project.budget) }}</td>
+                <td>{{ project.total_proposals }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

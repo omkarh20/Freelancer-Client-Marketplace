@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Projects</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                {% if session.role == 'admin' %}
+                <th>Client</th>
+                {% endif %}
+                <th>Budget</th>
+                <th>Status</th>
+                <th>Start Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.project_id }}</td>
+                <td>{{ project.project_title }}</td>
+                {% if session.role == 'admin' %}
+                <td>{{ project.client_name }}</td>
+                {% endif %}
+                <td>${{ "%.2f"|format(project.budget) }}</td>
+                <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
+                <td>{{ project.start_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

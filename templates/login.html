@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Freelancer Marketplace{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Login to Marketplace</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="role">Select Role</label>
+            <select name="role" id="role" required>
+                <option value="">-- Choose Role --</option>
+                <option value="client">Client</option>
+                <option value="freelancer">Freelancer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="user_id">User ID</label>
+            <input type="number" name="user_id" id="user_id" required placeholder="Enter your ID (1-10)">
+        </div>
+        <button type="submit">Login</button>
+    </form>
+</div>
+{% endblock %}

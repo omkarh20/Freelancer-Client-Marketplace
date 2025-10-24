@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Freelancer Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>Welcome, {{ freelancer.freelancer_name }}</h2>
+    <p>Email: {{ freelancer.freelancer_email }}</p>
+    <p>Member since: {{ freelancer.freelancer_registration_date }}</p>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <h3 class="rating">{{ "%.1f"|format(avg_rating) }} ⭐</h3>
+        <p>Average Rating</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ projects|length }}</h3>
+        <p>Active Projects</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>My Skills</h3>
+    <div class="skills">
+        {% for skill in skills %}
+        <span class="skill-tag">{{ skill.skill_name }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <h3>My Projects</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th>Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.project_title }}</td>
+                <td>{{ project.client_name }}</td>
+                <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
+                <td>${{ "%.2f"|format(project.expected_payment) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

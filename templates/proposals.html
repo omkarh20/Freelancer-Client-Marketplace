@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Proposals{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Proposals</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Project</th>
+                {% if session.role != 'freelancer' %}
+                <th>Freelancer</th>
+                {% endif %}
+                <th>Date</th>
+                <th>Expected Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proposal in proposals %}
+            <tr>
+                <td>{{ proposal.proposal_id }}</td>
+                <td>{{ proposal.project_title }}</td>
+                {% if session.role != 'freelancer' %}
+                <td>{{ proposal.freelancer_name }}</td>
+                {% endif %}
+                <td>{{ proposal.proposal_date }}</td>
+                <td>${{ "%.2f"|format(proposal.expected_payment) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
