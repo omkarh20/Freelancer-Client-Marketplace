@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Name *</label>
+            <input type="text" name="name" id="name" value="{{ user[name_field] }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" name="email" id="email" value="{{ user[email_field] }}" required>
+        </div>
+        
+        <button type="submit">Update Profile</button>
+        <a href="{{ url_for('dashboard_' + session.role) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

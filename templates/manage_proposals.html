@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Proposals{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Manage Proposals for: {{ project.project_title }}</h3>
+    <p><strong>Budget:</strong> ${{ "%.2f"|format(project.budget) }} | <strong>Status:</strong> <span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Freelancer</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Expected Payment</th>
+                <th>Cover Letter</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proposal in proposals %}
+            <tr>
+                <td>{{ proposal.freelancer_name }}</td>
+                <td>{{ proposal.freelancer_email }}</td>
+                <td>{{ proposal.proposal_date }}</td>
+                <td>${{ "%.2f"|format(proposal.expected_payment) }}</td>
+                <td>{{ proposal.cover_letter[:50] }}...</td>
+                <td><span class="status status-{{ proposal.proposal_status|lower }}">{{ proposal.proposal_status }}</span></td>
+                <td class="actions">
+                    {% if proposal.proposal_status == 'Pending' %}
+                    <a href="{{ url_for('accept_proposal', proposal_id=proposal.proposal_id) }}" class="btn btn-small btn-success">Accept</a>
+                    <a href="{{ url_for('reject_proposal', proposal_id=proposal.proposal_id) }}" class="btn btn-small btn-danger">Reject</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{{ url_for('projects') }}" class="btn btn-secondary">Back to Projects</a>
+</div>
+{% endblock %}

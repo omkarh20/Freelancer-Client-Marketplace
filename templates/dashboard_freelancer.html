@@ -38,6 +38,7 @@
                 <th>Client</th>
                 <th>Status</th>
                 <th>Payment</th>
+                <th>Proposal Status</th>
             </tr>
         </thead>
         <tbody>
@@ -47,6 +48,7 @@
                 <td>{{ project.client_name }}</td>
                 <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
                 <td>${{ "%.2f"|format(project.expected_payment) }}</td>
+                <td><span class="status status-{{ project.proposal_status|lower }}">{{ project.proposal_status }}</span></td>
             </tr>
             {% endfor %}
         </tbody>

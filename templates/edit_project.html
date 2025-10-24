@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Project{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Edit Project</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="title">Project Title *</label>
+            <input type="text" name="title" id="title" value="{{ project.project_title }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description">{{ project.project_description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" id="start_date" value="{{ project.start_date }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="end_date">End Date</label>
+            <input type="date" name="end_date" id="end_date" value="{{ project.end_date if project.end_date else '' }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="budget">Budget *</label>
+            <input type="number" step="0.01" name="budget" id="budget" value="{{ project.budget }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="status">Status *</label>
+            <select name="status" id="status" required>
+                <option value="Open" {% if project.project_status == 'Open' %}selected{% endif %}>Open</option>
+                <option value="In Progress" {% if project.project_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Completed" {% if project.project_status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="Canceled" {% if project.project_status == 'Canceled' %}selected{% endif %}>Canceled</option>
+            </select>
+        </div>
+        
+        <button type="submit">Update Project</button>
+        <a href="{{ url_for('projects') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

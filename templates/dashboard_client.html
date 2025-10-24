@@ -21,7 +21,10 @@
 </div>
 
 <div class="card">
-    <h3>My Projects</h3>
+    <div class="card-header">
+        <h3>My Projects</h3>
+        <a href="{{ url_for('add_project') }}" class="btn btn-small">+ Add Project</a>
+    </div>
     <table>
         <thead>
             <tr>
@@ -29,6 +32,7 @@
                 <th>Status</th>
                 <th>Budget</th>
                 <th>Proposals</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +41,11 @@
                 <td>{{ project.project_title }}</td>
                 <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
                 <td>${{ "%.2f"|format(project.budget) }}</td>
-                <td>{{ project.total_proposals }}</td>
+                <td>{{ project.total_proposals }} ({{ project.accepted_proposals }} accepted)</td>
+                <td class="actions">
+                    <a href="{{ url_for('edit_project', project_id=project.project_id) }}" class="btn btn-small btn-secondary">Edit</a>
+                    <a href="{{ url_for('manage_proposals', project_id=project.project_id) }}" class="btn btn-small">Manage</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

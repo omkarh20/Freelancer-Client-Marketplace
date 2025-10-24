@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Proposal{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Edit Proposal</h2>
+    <p><strong>Project:</strong> {{ proposal.project_title }}</p>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="cover_letter">Cover Letter *</label>
+            <textarea name="cover_letter" id="cover_letter" required>{{ proposal.cover_letter }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="expected_payment">Expected Payment *</label>
+            <input type="number" step="0.01" name="expected_payment" id="expected_payment" value="{{ proposal.expected_payment }}" required>
+        </div>
+        
+        <button type="submit">Update Proposal</button>
+        <a href="{{ url_for('proposals') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

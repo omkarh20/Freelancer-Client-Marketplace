@@ -1,4 +1,4 @@
-/* Dark Mode Minimalistic Theme */
+/* Enhanced Dark Mode Minimalistic Theme */
 
 * {
     margin: 0;
@@ -17,6 +17,44 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+}
+
+/* Flash Messages */
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.flash {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.flash.success {
+    background-color: #4caf50;
+    color: white;
+}
+
+.flash.error {
+    background-color: #f44336;
+    color: white;
 }
 
 /* Navigation */
@@ -72,6 +110,7 @@ nav a:hover {
     margin-bottom: 30px;
 }
 
+/* Forms */
 .form-group {
     margin-bottom: 20px;
 }
@@ -82,7 +121,7 @@ label {
     color: #b0b0b0;
 }
 
-select, input {
+select, input, textarea {
     width: 100%;
     padding: 12px;
     background-color: #3d3d3d;
@@ -92,14 +131,18 @@ select, input {
     font-size: 14px;
 }
 
-select:focus, input:focus {
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+select:focus, input:focus, textarea:focus {
     outline: none;
     border-color: #4a9eff;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
+button, .btn {
+    padding: 12px 24px;
     background-color: #4a9eff;
     color: white;
     border: none;
@@ -107,10 +150,41 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
 }
 
-button:hover {
+button:hover, .btn:hover {
     background-color: #3d8ce0;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-success {
+    background-color: #4caf50;
+}
+
+.btn-success:hover {
+    background-color: #45a049;
+}
+
+.btn-danger {
+    background-color: #f44336;
+}
+
+.btn-danger:hover {
+    background-color: #da190b;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 14px;
 }
 
 /* Dashboard */
@@ -210,6 +284,16 @@ tr:hover {
     color: white;
 }
 
+.status-accepted {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status-rejected {
+    background-color: #f44336;
+    color: white;
+}
+
 .status-failed {
     background-color: #f44336;
     color: white;
@@ -226,6 +310,13 @@ tr:hover {
 .card h3 {
     color: #4a9eff;
     margin-bottom: 15px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .skills {
@@ -248,4 +339,50 @@ tr:hover {
     color: #ffa500;
     font-size: 20px;
     font-weight: bold;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Form container */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #2d2d2d;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.form-container h2 {
+    color: #4a9eff;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav .container {
+        flex-direction: column;
+    }
+    
+    nav ul {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+    
+    th, td {
+        padding: 10px;
+    }
 }
