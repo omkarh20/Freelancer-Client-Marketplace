@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="card">
-    <h3>Reviews</h3>
+    <div class="card-header">
+        <h3>{{ 'My Reviews' if session.role == 'freelancer' else 'All Reviews' }}</h3>
+        {% if session.role == 'client' and completed_projects %}
+        <a href="{{ url_for('add_review_select') }}" class="btn btn-small">+ Add Review</a>
+        {% endif %}
+    </div>
     <table>
         <thead>
             <tr>
@@ -13,6 +18,7 @@
                 <th>Client</th>
                 {% else %}
                 <th>Freelancer</th>
+                <th>Client</th>
                 {% endif %}
                 <th>Rating</th>
                 <th>Comments</th>
@@ -27,6 +33,7 @@
                 <td>{{ review.client_name }}</td>
                 {% else %}
                 <td>{{ review.freelancer_name }}</td>
+                <td>{{ review.client_name }}</td>
                 {% endif %}
                 <td><span class="rating">{{ review.rating }} ⭐</span></td>
                 <td>{{ review.comments }}</td>

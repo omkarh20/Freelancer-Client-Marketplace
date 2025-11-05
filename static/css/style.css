@@ -1,5 +1,3 @@
-/* Enhanced Dark Mode Minimalistic Theme */
-
 * {
     margin: 0;
     padding: 0;
@@ -361,6 +359,290 @@ tr:hover {
     margin-bottom: 30px;
     text-align: center;
 }
+
+/* Project Details Card Styles */
+.project-details-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    margin-bottom: var(--space-24);
+}
+
+.project-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-16) 0;
+}
+
+.project-info p {
+    margin: 0;
+}
+
+.project-description {
+    margin-top: var(--space-24);
+    padding-top: var(--space-24);
+    border-top: 1px solid var(--color-border);
+}
+
+.project-description h4 {
+    margin-bottom: var(--space-12);
+}
+
+.form-container {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+}
+
+.form-container h3 {
+    margin-bottom: var(--space-20);
+}
+
+/* Review Form Specific Styles - No Conflicts */
+.review-form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #2d2d2d;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+.review-form-wrapper h2 {
+    color: #4a9eff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.review-project-info {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #b0b0b0;
+}
+
+.review-submission-form {
+    margin-top: 20px;
+}
+
+.review-input-group {
+    margin-bottom: 20px;
+}
+
+.review-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b0b0;
+}
+
+.review-select-input,
+.review-textarea-input {
+    width: 100%;
+    padding: 12px;
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.review-textarea-input {
+    min-height: 120px;
+    resize: vertical;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.review-select-input:focus,
+.review-textarea-input:focus {
+    outline: none;
+    border-color: #4a9eff;
+}
+
+.review-button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Admin Quick Access Cards */
+.admin-quick-access {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.quick-access-card {
+    background-color: #2d2d2d;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #3d3d3d;
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.quick-access-card:hover {
+    border-color: #4a9eff;
+    transform: translateY(-5px);
+}
+
+.quick-access-card h3 {
+    color: #4a9eff;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.quick-access-card p {
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.quick-access-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* Admin Page Header */
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #2d2d2d;
+    border-radius: 8px;
+}
+
+.admin-page-header h2 {
+    color: #4a9eff;
+    margin: 0;
+}
+
+/* Freelancer Skills Cell */
+.freelancer-skills-cell {
+    max-width: 250px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Text Muted */
+.text-muted {
+    color: #888;
+    font-style: italic;
+}
+
+/* Status Inactive */
+.status-inactive {
+    color: #666;
+}
+
+/* Button Primary Variant */
+.btn-primary {
+    background-color: #4a9eff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3d8ce0;
+}
+
+/* Skills Management Styles */
+.current-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #3d3d3d;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #4d4d4d;
+}
+
+.skill-item .skill-tag {
+    color: #4a9eff;
+    font-weight: 500;
+}
+
+.skill-remove-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    color: #f44336;
+    font-size: 13px;
+    margin: 0;
+}
+
+.skill-remove-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Skill Input Rows */
+#skillsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.skill-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.skill-input {
+    flex: 1;
+    padding: 10px;
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    border-radius: 4px;
+    color: #e0e0e0;
+}
+
+.skill-input:focus {
+    outline: none;
+    border-color: #4a9eff;
+}
+
+.btn-remove-skill {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-remove-skill:hover {
+    background-color: #da190b;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

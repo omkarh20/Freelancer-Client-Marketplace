@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Proposal{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h2>Submit Proposal</h2>
+</div>
+
+<div class="project-details-card">
+    <h3>{{ project.project_title }}</h3>
+    <div class="project-info">
+        <p><strong>Client:</strong> {{ project.client_name }}</p>
+        <p><strong>Budget:</strong> ${{ "%.2f"|format(project.budget) }}</p>
+        <p><strong>Start Date:</strong> {{ project.start_date if project.start_date else 'Not specified' }}</p>
+        <p><strong>End Date:</strong> {{ project.end_date if project.end_date else 'Not specified' }}</p>
+    </div>
+    <div class="project-description">
+        <h4>Project Description</h4>
+        <p>{{ project.project_description if project.project_description else 'No description provided' }}</p>
+    </div>
+</div>
+
+<div class="form-container">
+    <h3>Your Proposal</h3>
+    <form method="POST">
+        <div class="form-group">
+            <label for="expected_payment">Your Expected Payment *</label>
+            <input type="number" step="0.01" name="expected_payment" id="expected_payment" 
+                   max="{{ project.budget }}" required>
+            <small>Maximum budget: ${{ "%.2f"|format(project.budget) }}</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="cover_letter">Cover Letter *</label>
+            <textarea name="cover_letter" id="cover_letter" rows="8" required 
+                      placeholder="Explain why you're the best fit for this project..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit Proposal</button>
+        <a href="{{ url_for('available_projects') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

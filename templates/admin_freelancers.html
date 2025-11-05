@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}All Freelancers - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <h2>All Freelancers</h2>
+    <a href="{{ url_for('dashboard_admin') }}" class="btn btn-secondary">← Back to Dashboard</a>
+</div>
+
+{% if freelancers %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Skills</th>
+                <th>Registration Date</th>
+                <th>Completed Projects</th>
+                <th>Avg Rating</th>
+                <th>Reviews</th>
+                <th>Total Earned</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for freelancer in freelancers %}
+            <tr>
+                <td>{{ freelancer.freelancer_id }}</td>
+                <td>{{ freelancer.freelancer_name }}</td>
+                <td>{{ freelancer.freelancer_email }}</td>
+                <td class="freelancer-skills-cell">
+                    {% if freelancer.skills %}
+                        {{ freelancer.skills }}
+                    {% else %}
+                        <span class="text-muted">No skills listed</span>
+                    {% endif %}
+                </td>
+                <td>{{ freelancer.freelancer_registration_date }}</td>
+                <td>{{ freelancer.completed_projects }}</td>
+                <td>
+                    {% if freelancer.avg_rating > 0 %}
+                    <span class="rating">⭐ {{ "%.1f"|format(freelancer.avg_rating) }}</span>
+                    {% else %}
+                    <span class="text-muted">No ratings</span>
+                    {% endif %}
+                </td>
+                <td>{{ freelancer.reviews_received }}</td>
+                <td>${{ "%.2f"|format(freelancer.total_earned) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No freelancers registered yet.</p>
+</div>
+{% endif %}
+{% endblock %}

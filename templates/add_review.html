@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Add Review{% endblock %}
+
+{% block content %}
+<div class="review-form-wrapper">
+    <h2>Add Review for {{ freelancer.freelancer_name }}</h2>
+    <p class="review-project-info"><strong>Project:</strong> {{ project.project_title }}</p>
+    
+    <form method="POST" class="review-submission-form">
+        <div class="review-input-group">
+            <label for="rating">Rating (1-5) *</label>
+            <select name="rating" id="rating" class="review-select-input" required>
+                <option value="">-- Select Rating --</option>
+                <option value="5">⭐⭐⭐⭐⭐ Excellent (5)</option>
+                <option value="4">⭐⭐⭐⭐ Very Good (4)</option>
+                <option value="3">⭐⭐⭐ Average (3)</option>
+                <option value="2">⭐⭐ Fair (2)</option>
+                <option value="1">⭐ Poor (1)</option>
+            </select>
+        </div>
+        
+        <div class="review-input-group">
+            <label for="comments">Comments *</label>
+            <textarea name="comments" id="comments" class="review-textarea-input" required 
+                      placeholder="Share your experience working with this freelancer..."></textarea>
+        </div>
+        
+        <div class="review-button-group">
+            <button type="submit" class="btn">Submit Review</button>
+            <a href="{{ url_for('projects') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}All Clients - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <h2>All Clients</h2>
+    <a href="{{ url_for('dashboard_admin') }}" class="btn btn-secondary">← Back to Dashboard</a>
+</div>
+
+{% if clients %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Total Projects</th>
+                <th>Active Projects</th>
+                <th>Reviews Given</th>
+                <th>Total Spent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.client_id }}</td>
+                <td>{{ client.client_name }}</td>
+                <td>{{ client.client_email }}</td>
+                <td>{{ client.client_registration_date }}</td>
+                <td>{{ client.total_projects }}</td>
+                <td>
+                    {% if client.active_projects > 0 %}
+                    <span class="status status-in-progress">{{ client.active_projects }}</span>
+                    {% else %}
+                    <span class="status-inactive">0</span>
+                    {% endif %}
+                </td>
+                <td>{{ client.reviews_given }}</td>
+                <td>${{ "%.2f"|format(client.total_spent) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No clients registered yet.</p>
+</div>
+{% endif %}
+{% endblock %}

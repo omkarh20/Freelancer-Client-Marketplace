@@ -1,6 +1,4 @@
-// Enhanced JavaScript for interactive features
-
-console.log('Freelancer Marketplace Enhanced Version loaded');
+console.log('Freelancer Marketplace loaded');
 
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-hide flash messages after 5 seconds

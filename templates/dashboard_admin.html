@@ -8,6 +8,7 @@
     <p>Complete marketplace overview</p>
 </div>
 
+<!-- Statistics Cards -->
 <div class="stats">
     <div class="stat-card">
         <h3>{{ total_clients }}</h3>
@@ -23,18 +24,24 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h3>Quick Actions</h3>
-        <div class="actions">
-            <a href="{{ url_for('add_client') }}" class="btn btn-small">+ Add Client</a>
-            <a href="{{ url_for('add_freelancer') }}" class="btn btn-small">+ Add Freelancer</a>
-        </div>
+<!-- Quick Access Cards -->
+<div class="admin-quick-access">
+    <div class="quick-access-card">
+        <h3>Clients Management</h3>
+        <p>View all clients with detailed statistics including active projects, reviews given, and total spending.</p>
+        <a href="{{ url_for('admin_clients') }}" class="btn btn-primary">View All Clients</a>
+    </div>
+    
+    <div class="quick-access-card">
+        <h3>Freelancers Management</h3>
+        <p>View all freelancers with their skills, ratings, completed projects, and earnings.</p>
+        <a href="{{ url_for('admin_freelancers') }}" class="btn btn-primary">View All Freelancers</a>
     </div>
 </div>
 
+<!-- All Projects Table -->
 <div class="card">
-    <h3>Recent Projects</h3>
+    <h3>All Projects</h3>
     <table>
         <thead>
             <tr>

@@ -4,22 +4,72 @@
 
 {% block content %}
 <div class="login-container">
-    <h2>Login to Marketplace</h2>
+    <h2>{{ 'Register' if register_mode else 'Login to Marketplace' }}</h2>
+    {% if error %}
+        <div class="flash error">{{ error }}</div>
+    {% endif %}
+    
+    {% if not register_mode %}
+    <!-- Login Form -->
     <form method="POST">
+        <input type="hidden" name="action" value="login">
         <div class="form-group">
             <label for="role">Select Role</label>
-            <select name="role" id="role" required>
+            <select name="role" id="role" required onchange="toggleFields()">
                 <option value="">-- Choose Role --</option>
                 <option value="client">Client</option>
                 <option value="freelancer">Freelancer</option>
                 <option value="admin">Admin</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="user_id_group">
             <label for="user_id">User ID</label>
-            <input type="number" name="user_id" id="user_id" required placeholder="Enter your ID (1-10)">
+            <input type="number" name="user_id" id="user_id" placeholder="Enter your ID">
+        </div>
+        <div class="form-group" id="admin_password_group" style="display: none;">
+            <label for="admin_password">Admin Password</label>
+            <input type="password" name="admin_password" id="admin_password" placeholder="Enter admin password">
         </div>
         <button type="submit">Login</button>
     </form>
+    <p style="text-align: center; margin-top: 20px;">
+        Don't have an account? <a href="{{ url_for('register') }}" style="color: #4a9eff;">Register here</a>
+    </p>
+    {% else %}
+    <!-- Registration Form -->
+    <form method="POST">
+        <input type="hidden" name="action" value="register">
+        <div class="form-group">
+            <label for="reg_role">Register as</label>
+            <select name="reg_role" id="reg_role" required>
+                <option value="">-- Choose Role --</option>
+                <option value="client">Client</option>
+                <option value="freelancer">Freelancer</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="reg_name">Full Name</label>
+            <input type="text" name="reg_name" id="reg_name" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+            <label for="reg_email">Email</label>
+            <input type="email" name="reg_email" id="reg_email" required placeholder="Enter your email">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <p style="text-align: center; margin-top: 20px;">
+        Already have an account? <a href="{{ url_for('login') }}" style="color: #4a9eff;">Login here</a>
+    </p>
+    {% endif %}
 </div>
+<script>
+function toggleFields() {
+    var role = document.getElementById('role').value;
+    document.getElementById('user_id_group').style.display = (role == 'admin') ? 'none' : 'block';
+    document.getElementById('admin_password_group').style.display = (role == 'admin') ? 'block' : 'none';
+}
+if (document.getElementById('role')) {
+    document.getElementById('role').addEventListener('change', toggleFields);
+}
+</script>
 {% endblock %}

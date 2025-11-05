@@ -2,12 +2,6 @@
 
 USE Freelancer_Client_Marketplace;
 
--- ==================== ADD NEW TABLES FOR PROPOSAL STATUS ====================
-
--- Add proposal_status column to Proposals table
-ALTER TABLE Proposals ADD COLUMN proposal_status VARCHAR(20) DEFAULT 'Pending' 
-    CHECK (proposal_status IN ('Pending', 'Accepted', 'Rejected'));
-
 -- ==================== VIEWS ====================
 
 -- View: Client Projects Overview
@@ -20,10 +14,12 @@ SELECT
     p.project_status,
     p.budget,
     COUNT(DISTINCT prop.freelancer_id) AS total_proposals,
-    COUNT(DISTINCT CASE WHEN prop.proposal_status = 'Accepted' THEN prop.freelancer_id END) AS accepted_proposals
+    COUNT(DISTINCT CASE WHEN prop.proposal_status = 'Accepted' THEN prop.freelancer_id END) AS accepted_proposals,
+    GROUP_CONCAT(DISTINCT CASE WHEN prop.proposal_status = 'Accepted' THEN f.freelancer_name END) AS assigned_freelancer
 FROM Client c
 LEFT JOIN Projects p ON c.client_id = p.client_id
 LEFT JOIN Proposals prop ON p.project_id = prop.project_id
+LEFT JOIN Freelancers f ON prop.freelancer_id = f.freelancer_id AND prop.proposal_status = 'Accepted'
 GROUP BY c.client_id, p.project_id;
 
 -- View: Freelancer Active Projects
@@ -77,9 +73,13 @@ SELECT
     p.end_date,
     c.client_id,
     c.client_name,
-    c.client_email
+    c.client_email,
+    GROUP_CONCAT(DISTINCT CASE WHEN prop.proposal_status = 'Accepted' THEN f.freelancer_name END) AS assigned_freelancer
 FROM Projects p
-JOIN Client c ON p.client_id = c.client_id;
+JOIN Client c ON p.client_id = c.client_id
+LEFT JOIN Proposals prop ON p.project_id = prop.project_id AND prop.proposal_status = 'Accepted'
+LEFT JOIN Freelancers f ON prop.freelancer_id = f.freelancer_id
+GROUP BY p.project_id;
 
 -- ==================== STORED PROCEDURES ====================
 
@@ -124,13 +124,18 @@ CREATE PROCEDURE get_payment_history(IN input_client_id INT)
 BEGIN
     SELECT 
         pay.payment_id,
+        p.project_id,
         p.project_title,
         pay.amount,
         pay.payment_date,
-        pay.payment_status
+        pay.payment_status,
+        GROUP_CONCAT(DISTINCT CASE WHEN prop.proposal_status = 'Accepted' THEN f.freelancer_name END) AS freelancer_name
     FROM Payments pay
     JOIN Projects p ON pay.project_id = p.project_id
+    LEFT JOIN Proposals prop ON p.project_id = prop.project_id AND prop.proposal_status = 'Accepted'
+    LEFT JOIN Freelancers f ON prop.freelancer_id = f.freelancer_id
     WHERE p.client_id = input_client_id
+    GROUP BY pay.payment_id
     ORDER BY pay.payment_date DESC;
 END //
 DELIMITER ;
@@ -289,24 +294,20 @@ CREATE PROCEDURE accept_proposal(IN p_proposal_id INT)
 BEGIN
     DECLARE v_project_id INT;
     
-    -- Get project_id for this proposal
     SELECT project_id INTO v_project_id
     FROM Proposals
     WHERE proposal_id = p_proposal_id;
     
-    -- Update proposal status to Accepted
     UPDATE Proposals
     SET proposal_status = 'Accepted'
     WHERE proposal_id = p_proposal_id;
     
-    -- Reject all other proposals for this project
     UPDATE Proposals
     SET proposal_status = 'Rejected'
     WHERE project_id = v_project_id 
       AND proposal_id != p_proposal_id
       AND proposal_status = 'Pending';
     
-    -- Update project status to In Progress
     UPDATE Projects
     SET project_status = 'In Progress'
     WHERE project_id = v_project_id;
@@ -415,23 +416,73 @@ BEGIN
 END //
 DELIMITER ;
 
--- Trigger: Log proposal status changes
-CREATE TABLE IF NOT EXISTS proposal_logs (
-    log_id INT AUTO_INCREMENT PRIMARY KEY,
-    proposal_id INT,
-    old_status VARCHAR(20),
-    new_status VARCHAR(20),
-    change_date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
+-- Trigger: Ensure review date is after project end date
 DELIMITER //
-CREATE TRIGGER after_proposal_status_change
-AFTER UPDATE ON Proposals
+CREATE TRIGGER before_review_insert
+BEFORE INSERT ON Reviews
 FOR EACH ROW
 BEGIN
-    IF NEW.proposal_status != OLD.proposal_status THEN
-        INSERT INTO proposal_logs (proposal_id, old_status, new_status)
-        VALUES (NEW.proposal_id, OLD.proposal_status, NEW.proposal_status);
+    DECLARE latest_project_end DATE;
+    
+    -- Get the latest end date of completed projects between this client and freelancer
+    SELECT MAX(p.end_date) INTO latest_project_end
+    FROM Projects p
+    JOIN Proposals prop ON p.project_id = prop.project_id
+    WHERE p.client_id = NEW.client_id 
+      AND prop.freelancer_id = NEW.freelancer_id
+      AND p.project_status = 'Completed'
+      AND p.end_date IS NOT NULL;
+    
+    -- If a completed project exists, ensure review is after project end
+    IF latest_project_end IS NOT NULL AND NEW.review_date < latest_project_end THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Review date cannot be before project end date';
+    END IF;
+END //
+DELIMITER ;
+
+-- Trigger: Prevent payment for projects that haven't started
+DELIMITER //
+CREATE TRIGGER validate_payment_project_status
+BEFORE INSERT ON Payments
+FOR EACH ROW
+BEGIN
+    DECLARE proj_status VARCHAR(20);
+    DECLARE proj_start DATE;
+    
+    SELECT project_status, start_date INTO proj_status, proj_start
+    FROM Projects
+    WHERE project_id = NEW.project_id;
+    
+    -- Prevent completed payments for Open projects
+    IF proj_status = 'Open' AND NEW.payment_status = 'Completed' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot mark payment as completed for projects that have not started';
+    END IF;
+    
+    -- Ensure payment date is after project start
+    IF NEW.payment_date < proj_start THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Payment date cannot be before project start date';
+    END IF;
+END //
+DELIMITER ;
+
+-- Trigger: Ensure client registration before project creation
+DELIMITER //
+CREATE TRIGGER validate_client_project_dates
+BEFORE INSERT ON Projects
+FOR EACH ROW
+BEGIN
+    DECLARE client_reg DATE;
+    
+    SELECT client_registration_date INTO client_reg
+    FROM Client
+    WHERE client_id = NEW.client_id;
+    
+    IF NEW.start_date < client_reg THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Project start date cannot be before client registration date';
     END IF;
 END //
 DELIMITER ;

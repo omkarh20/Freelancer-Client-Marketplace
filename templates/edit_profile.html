@@ -5,7 +5,7 @@
 {% block content %}
 <div class="form-container">
     <h2>Edit Profile</h2>
-    <form method="POST">
+    <form method="POST" id="profileForm">
         <div class="form-group">
             <label for="name">Name *</label>
             <input type="text" name="name" id="name" value="{{ user[name_field] }}" required>
@@ -16,8 +16,61 @@
             <input type="email" name="email" id="email" value="{{ user[email_field] }}" required>
         </div>
         
-        <button type="submit">Update Profile</button>
-        <a href="{{ url_for('dashboard_' + session.role) }}" class="btn btn-secondary">Cancel</a>
+        {% if session.role == 'freelancer' %}
+        <!-- Current Skills Section -->
+        {% if current_skills %}
+        <div class="form-group">
+            <label>Current Skills</label>
+            <div class="current-skills-list">
+                {% for skill in current_skills %}
+                <div class="skill-item">
+                    <span class="skill-tag">{{ skill.skill_name }}</span>
+                    <label class="skill-remove-checkbox">
+                        <input type="checkbox" name="remove_skill" value="{{ skill.skill_id }}">
+                        Remove
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Add New Skills Section -->
+        <div class="form-group">
+            <label>Add New Skills</label>
+            <div id="skillsContainer">
+                <div class="skill-input-row">
+                    <input type="text" name="new_skill[]" class="skill-input" placeholder="e.g., Python, JavaScript, Design">
+                    <button type="button" class="btn-remove-skill" onclick="removeSkillInput(this)" style="display: none;">×</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addSkillInput()">+ Add Another Skill</button>
+        </div>
+        {% endif %}
+        
+        <div class="form-actions">
+            <button type="submit" class="btn">Update Profile</button>
+            <a href="{{ url_for('dashboard_' + session.role) }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
+
+{% if session.role == 'freelancer' %}
+<script>
+function addSkillInput() {
+    const container = document.getElementById('skillsContainer');
+    const newRow = document.createElement('div');
+    newRow.className = 'skill-input-row';
+    newRow.innerHTML = `
+        <input type="text" name="new_skill[]" class="skill-input" placeholder="e.g., Python, JavaScript, Design">
+        <button type="button" class="btn-remove-skill" onclick="removeSkillInput(this)">×</button>
+    `;
+    container.appendChild(newRow);
+}
+
+function removeSkillInput(button) {
+    button.parentElement.remove();
+}
+</script>
+{% endif %}
 {% endblock %}

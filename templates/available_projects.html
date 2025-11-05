@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Available Projects{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h2>Available Projects</h2>
+    <p>Browse open projects and submit proposals</p>
+</div>
+
+{% if projects %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>Client</th>
+                <th>Budget</th>
+                <th>Start Date</th>
+                <th>Proposals</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.project_title }}</td>
+                <td>{{ project.client_name }}</td>
+                <td>${{ "%.2f"|format(project.budget) }}</td>
+                <td>{{ project.start_date if project.start_date else 'Not specified' }}</td>
+                <td>{{ project.proposal_count }}</td>
+                <td>
+                    {% if project.project_description %}
+                        {{ project.project_description[:100] }}{% if project.project_description|length > 100 %}...{% endif %}
+                    {% else %}
+                        No description
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('submit_proposal', project_id=project.project_id) }}" class="btn btn-primary">
+                        Submit Proposal
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No available projects at the moment. Check back later!</p>
+</div>
+{% endif %}
+{% endblock %}

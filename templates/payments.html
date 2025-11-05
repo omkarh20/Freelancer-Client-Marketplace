@@ -10,12 +10,16 @@
             <tr>
                 <th>ID</th>
                 <th>Project</th>
+                <th>Freelancer</th>
                 {% if session.role == 'admin' %}
                 <th>Client</th>
                 {% endif %}
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Status</th>
+                {% if session.role == 'freelancer' %}
+                <th>Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -23,12 +27,20 @@
             <tr>
                 <td>{{ payment.payment_id }}</td>
                 <td>{{ payment.project_title }}</td>
+                <td>{{ payment.freelancer_name if payment.freelancer_name else '-' }}</td>
                 {% if session.role == 'admin' %}
                 <td>{{ payment.client_name }}</td>
                 {% endif %}
                 <td>${{ "%.2f"|format(payment.amount) }}</td>
                 <td>{{ payment.payment_date }}</td>
                 <td><span class="status status-{{ payment.payment_status|lower }}">{{ payment.payment_status }}</span></td>
+                {% if session.role == 'freelancer' %}
+                <td>
+                    {% if payment.payment_status == 'Pending' %}
+                    <a href="{{ url_for('update_payment_status', payment_id=payment.payment_id) }}" class="btn btn-small btn-success">Mark Completed</a>
+                    {% endif %}
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

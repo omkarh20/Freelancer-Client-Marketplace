@@ -13,7 +13,10 @@
             <h1>Freelancer Marketplace</h1>
             <ul>
                 <li><a href="{{ url_for('dashboard_' + session.role) }}">Dashboard</a></li>
-                <li><a href="{{ url_for('projects') }}">Projects</a></li>
+                <li><a href="{{ url_for('projects') }}">MyProjects</a></li>
+                {% if session.role == 'freelancer' %}
+                    <li><a href="{{ url_for('available_projects') }}">Projects</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('payments') }}">Payments</a></li>
                 <li><a href="{{ url_for('proposals') }}">Proposals</a></li>
                 <li><a href="{{ url_for('reviews') }}">Reviews</a></li>

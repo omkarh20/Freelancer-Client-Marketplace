@@ -29,6 +29,7 @@
         <thead>
             <tr>
                 <th>Project Title</th>
+                <th>Freelancer</th>
                 <th>Status</th>
                 <th>Budget</th>
                 <th>Proposals</th>
@@ -39,6 +40,7 @@
             {% for project in projects %}
             <tr>
                 <td>{{ project.project_title }}</td>
+                <td>{{ project.assigned_freelancer if project.assigned_freelancer else '-' }}</td>
                 <td><span class="status status-{{ project.project_status|lower|replace(' ', '-') }}">{{ project.project_status }}</span></td>
                 <td>${{ "%.2f"|format(project.budget) }}</td>
                 <td>{{ project.total_proposals }} ({{ project.accepted_proposals }} accepted)</td>
