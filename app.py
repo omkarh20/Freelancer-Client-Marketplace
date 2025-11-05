@@ -13,7 +13,7 @@ app.secret_key = os.getenv('SECRET_KEY')
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'Omkar123',  
+    'password': os.getenv('DB_PASSWORD'),  
     'database': 'Freelancer_Client_Marketplace'
 }
 
